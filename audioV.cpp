@@ -13,7 +13,7 @@ BOOL WINAPI onConsoleClose(DWORD signal);
 // The number of samples displayed to the visualizer at once.
 // Basically, controls how much history of audio we store and display.
 // No latency tradeoffs. Must be larger than displaySize.
-const unsigned int sampleSize = 2048;
+const unsigned int sampleSize = 4096/2;
 
 // RtAudio callback buffer size in frames.
 // In stereo, each frame will deliver bufferFrames * 2 samples.
@@ -23,8 +23,8 @@ unsigned int bufferFrames = 1024;
 // Y-axis range for the waveform plot.
 // Smaller = more reactive to quiet audio but clips loud audio.
 // Larger = handles loud audio cleanly but quiet audio looks flat.
-const float yAxisMin = -.5;
-const float yAxisMax = .5f;
+const float yAxisMin = -1.5f;
+const float yAxisMax = 1.5f;
 
 bool running = true;
 
@@ -43,7 +43,7 @@ struct RingBuffer
 int  main()
 {
     // Heap allocated RingBuffer variable
-    RingBuffer* dataFlow = new RingBuffer();
+    auto dataFlow = std::make_unique<RingBuffer>();
 
     // closing console sets ruunning = false
     SetConsoleCtrlHandler(onConsoleClose, TRUE);
@@ -122,6 +122,10 @@ int  main()
     // Tells OpenGL what window to draw stuff to.
     glfwMakeContextCurrent(window);
 
+    // caps to monitor refresh rate
+    // doesn't let the loop run uncapped
+    glfwSwapInterval(1);
+
     // Intialize GUI tools
     ImGui::CreateContext();
     // Attach GUI onto GLFW window for input detection
@@ -141,7 +145,7 @@ int  main()
         defaultSampRate,
         &bufferFrames,
         audioLoopBack,
-        dataFlow
+        dataFlow.get()
     );
 
     if (err != RTAUDIO_NO_ERROR)
@@ -217,7 +221,17 @@ int  main()
         // Y-axis min and max, smaller number makes the graph more "reactive looking" to lower volumes
         // but distorts the graph. High values display a less "reactive looking" graph to lower volumes.
         // Finally, the window size to draw the graph in.
-        ImGui::PlotLines("wave", arrayPtr, sampleSize, dataFlow->writeIndex, NULL, yAxisMin, yAxisMax, ImVec2((float)width, (float)height));
+        // also, do not let writeIndex go unbound, contain it within [0, sampleSize]
+        ImGui::PlotLines(
+            "wave",
+            arrayPtr,
+            sampleSize,
+            dataFlow->writeIndex.load() & sampleSize - 1,
+            NULL,
+            yAxisMin,
+            yAxisMax,
+            ImVec2((float)width, (float)height)
+        );
 
         // Close the GUI window and the styles we pushed earlier.
         ImGui::End();
@@ -279,11 +293,13 @@ int audioLoopBack(void*, void* inputBuffer, unsigned int numOfFrames, double, Rt
     for (unsigned int i = 0; i < numOfFrames * 2; ++i)
     {
         // Adds the streamed inputBuffer values to the data array.
-        // Wraps when array is full (writeIndex % sampleSize).
-        dataFlow->data[dataFlow->writeIndex % sampleSize] = sampleFrames[i];
+        // Wraps when array is full (writeIndex & (sampleSize - 1)).
+        // no need to wrap  writeIndex, since bitwise & is fast
+        dataFlow->data[dataFlow->writeIndex & (sampleSize - 1)] = sampleFrames[i];
 
         // increment the index we are at in the data array
-        ++dataFlow->writeIndex;
+        // avoids sequentially consistent order (bad for performance)
+        dataFlow->writeIndex.store(dataFlow->writeIndex.load() + 1, std::memory_order_release);
     }
 
     return 0;
