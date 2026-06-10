@@ -12,10 +12,23 @@ Download the exe from the Releases page and run it. No install needed.
 
 ## How to build
 
-Requires Visual Studio 2022. Open AudioVisualizer.sln and build in Release mode. Dependencies (RtAudio, ImGui, GLFW) are included in the repo. You will need to manually configure the include and library paths in the project properties to match your local GLFW installation.
+### Requirements
+- Windows 10/11
+- CMake 3.20+
+- MSVC compiler (Visual Studio 2022 Build Tools or later)
+
+### Steps
+```bash
+git clone https://github.com/moemente/AudioVisualizer.git
+cd AudioVisualizer
+cmake -B build -A x64
+cmake --build build --config Release
+```
+
+The exe will be at `build/Release/AudioVisualizer.exe`.
 
 ## Libraries used
 
 - [RtAudio](https://github.com/thestk/rtaudio)
-- [Dear ImGui](https://github.com/ocornut/imgui)
+- [ImGui](https://github.com/ocornut/imgui)
 - [GLFW](https://www.glfw.org/)

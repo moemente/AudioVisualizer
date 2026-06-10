@@ -1,6 +1,5 @@
 # Build output
 build/
-x64/
 
 # Visual Studio artifacts
 .vs/
