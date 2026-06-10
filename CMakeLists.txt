@@ -43,3 +43,8 @@ target_link_libraries(AudioVisualizer PRIVATE
     ole32
     ksuser
 )
+
+set_target_properties(AudioVisualizer PROPERTIES
+    WIN32_EXECUTABLE TRUE
+    LINK_FLAGS "/ENTRY:mainCRTStartup"
+)

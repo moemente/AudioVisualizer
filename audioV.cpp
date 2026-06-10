@@ -59,20 +59,14 @@ int  main()
 
     if (deviceCount <= 0)
     {
-        std::cout << "---ERROR: No audio devices found---\n\n";
+        MessageBoxA(NULL, "No audio devices found.", "Audio Visualizer Error", MB_OK | MB_ICONERROR);
         return 1;
     }
 
-    std::cout << "Number of devices found: " << deviceCount;
+    //std::cout << "Number of devices found: " << deviceCount;
 
     // Stores all ids to a vector to loop over.
     std::vector<unsigned int> ids = audio.getDeviceIds();
-
-    if (ids.empty() == true)
-    {
-        std::cout << "\n\n---ERROR 2 WITH READING DEVICES---\n\n";
-        return 1;
-    }
 
     // Loop over all ids in previously made vector of ids.
     for (unsigned int id : ids)
@@ -92,20 +86,20 @@ int  main()
             // default device's sample rate.
             defaultSampRate = device.preferredSampleRate;
 
-            std::cout << "\nDefault Device: " << device.ID
-                << "\nDefault Name: " << device.name
-                << "\nDefault Output Channels: " << device.outputChannels
-                << " Default Input Channels: " << device.inputChannels
-                << "\nDefault Is Default Input Device: " << device.isDefaultInput
-                << "\nDefault Is Default Output Device: " << device.isDefaultOutput
-                << "\nDefault Preferred Sample Rate: " << device.preferredSampleRate << "\n";
+            //std::cout << "\nDefault Device: " << device.ID
+            //    << "\nDefault Name: " << device.name
+            //    << "\nDefault Output Channels: " << device.outputChannels
+            //    << " Default Input Channels: " << device.inputChannels
+            //    << "\nDefault Is Default Input Device: " << device.isDefaultInput
+            //    << "\nDefault Is Default Output Device: " << device.isDefaultOutput
+            //    << "\nDefault Preferred Sample Rate: " << device.preferredSampleRate << "\n";
         }
     }
 
     // Setup glfw library and error check.
     if (glfwInit() == false)
     {
-        std::cout << "\n\n---ERROR WITH INITIALIZING GLFW LIBRARY---\n\n";
+        MessageBoxA(NULL, "Error with initializing GLFW library.", "Audio Visualizer Error", MB_OK | MB_ICONERROR);
         return 1;
     }
 
@@ -115,7 +109,7 @@ int  main()
     if (window == false)
     {
         glfwTerminate();
-        std::cout << "\n\n---ERROR WITH CREATING GLFW WINDOW---\n\n";
+        MessageBoxA(NULL, "Error with creating GLFW window.", "Audio Visualizer Error", MB_OK | MB_ICONERROR);
         return 1;
     }
 
@@ -150,7 +144,7 @@ int  main()
 
     if (err != RTAUDIO_NO_ERROR)
     {
-        std::cout << "\n\n---ERROR WITH OPENING AUDIO STREAM---\n\n";
+        MessageBoxA(NULL, "Error with opening audio stream -- RtAudio.", "Audio Visualizer Error", MB_OK | MB_ICONERROR);
         return 1;
     }
 
@@ -158,7 +152,7 @@ int  main()
 
     if (err != RTAUDIO_NO_ERROR)
     {
-        std::cout << "\n\n---ERROR WITH STARTING AUDIO STREAM---\n\n";
+        MessageBoxA(NULL, "Error with starting audio stream.", "Audio Visualizer Error", MB_OK | MB_ICONERROR);
         return 1;
     }
 
@@ -197,6 +191,15 @@ int  main()
         ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
         // Set the line that plots the audio float values to green
         ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(0, 1, 0, 1));
+        // Disables built-in hover behavior
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 0, 0, 0));
+        // Renders background tooltip to  be transparent
+        ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0, 0, 0, 0));
+        // Renders border tooltip to be transparent
+        ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0,0,0,0));
+        // Stops the red  highlighting
+        ImGui::PushStyleColor(ImGuiCol_PlotLines, ImVec4(0, 1, 0, 1));
+        ImGui::PushStyleColor(ImGuiCol_PlotLinesHovered, ImVec4(0, 1, 0, 1));
 
         // Create the GUI window on the canvas
         // -- No title
@@ -235,7 +238,7 @@ int  main()
 
         // Close the GUI window and the styles we pushed earlier.
         ImGui::End();
-        ImGui::PopStyleColor(3);
+        ImGui::PopStyleColor(8);
         ImGui::PopStyleVar();
 
         // Converts GUI commands to OpenGL draw calls.
@@ -264,7 +267,7 @@ int  main()
 
     else
     {
-        std::cout << "\nFile successfully deleted\n";
+        //std::cout << "\nFile successfully deleted\n";
     }
 
     return 0;
@@ -276,7 +279,7 @@ int audioLoopBack(void*, void* inputBuffer, unsigned int numOfFrames, double, Rt
 {
     if (inputBuffer == nullptr || userData == nullptr)
     {
-        std::cout << "\n\n---ERROR WITH NULLPTR TO INPUTBUFFER OR DATA ARRAY---\n\n";
+        MessageBoxA(NULL, "Error with audio stream being empty.", "Audio Visualizer Error", MB_OK | MB_ICONERROR);
         return 1;
     }
 
