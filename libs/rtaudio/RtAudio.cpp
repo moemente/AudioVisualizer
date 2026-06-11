@@ -9208,7 +9208,8 @@ static void rt_pa_set_source_info_and_quit( pa_context * /*c*/, const pa_source_
       // Check if we've already probed this as an output.
       if ( !paProbeInfo->paDeviceList->at(n).sinkName.empty() ) {
         // This must be a duplex device. Update the device info.
-        paProbeInfo->paDeviceList->at(n).sourceName = i->name;
+        // Use the sink's monitor source for loopback instead of the mic input.
+        paProbeInfo->paDeviceList->at(n).sourceName = paProbeInfo->paDeviceList->at(n).sinkName + ".monitor";
         paProbeInfo->rtDeviceList->at(n).inputChannels = i->sample_spec.channels;
         paProbeInfo->rtDeviceList->at(n).isDefaultInput = ( paProbeInfo->defaultSourceName == i->name );
         paProbeInfo->rtDeviceList->at(n).duplexChannels = 
