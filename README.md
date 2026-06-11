@@ -52,8 +52,9 @@ git clone https://github.com/moemente/AudioVisualizer.git
 cd AudioVisualizer
 cmake -B build
 cmake --build build
-./build/AudioVisualizer
 ```
+
+The exe will be at `build/AudioVisualizer`.
 
 ## Libraries used
 
