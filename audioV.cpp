@@ -16,12 +16,7 @@ int  main()
     // Errors if no devices are found
     if (deviceCount <= 0)
     {
-        MessageBoxA(
-            NULL, 
-            "No audio devices found.", 
-            "Audio Visualizer Error", 
-            MB_OK | MB_ICONERROR
-        );
+        fprintf(stderr, "No audio devices found.");
         return 1;
     }
 
@@ -48,12 +43,8 @@ int  main()
     // Initializes GLFW, errors out if it fails.
     if (glfwInit() == false)
     {
-        MessageBoxA(
-            NULL, 
-            "Error with initializing GLFW library.", 
-            "Audio Visualizer Error", 
-            MB_OK | MB_ICONERROR
-        );
+
+        fprintf(stderr, "Error with initializing GLFW library.");
         return 1;
     }
     // Creates a 640x480 window titled AudioV, canvas for GUI.
@@ -62,12 +53,7 @@ int  main()
     if (window == false)
     {
         glfwTerminate();
-        MessageBoxA(
-            NULL, 
-            "Error with creating GLFW window.", 
-            "Audio Visualizer Error",
-            MB_OK | MB_ICONERROR
-        );
+        fprintf(stderr, "Error with creating GLFW window.");
         return 1;
     }
     // Tells OpenGL what window to draw stuff to.
@@ -108,12 +94,7 @@ int  main()
     // Checks if opening stream has any error.
     if (err != RTAUDIO_NO_ERROR)
     {
-        MessageBoxA(
-            NULL, 
-            "Error with opening RtAudio audio stream.", 
-            "Audio Visualizer Error", 
-            MB_OK | MB_ICONERROR
-        );
+        fprintf(stderr, "Error with opening RtAudio audio stream.");
         return 1;
     }
     // Tells RtAudio to begin processing data.
@@ -121,12 +102,7 @@ int  main()
     // Checks if starting stream has any error.
     if (err != RTAUDIO_NO_ERROR)
     {
-        MessageBoxA(
-            NULL, 
-            "Error with starting audio stream.", 
-            "Audio Visualizer Error", 
-            MB_OK | MB_ICONERROR
-        );
+        fprintf(stderr, "Error with starting audio stream.");
         return 1;
     }
 
