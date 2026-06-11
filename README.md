@@ -2,30 +2,39 @@
 
 A real-time audio visualizer for Windows and Linux built in C++ using RtAudio, KissFFT, and ImGui.
 
-## What it does
+Captures your default audio output via loopback and renders it as a live waveform and frequency spectrum.
 
-Scans your connected audio devices, finds your default output device, and feeds the output back in as an input to create a loopback. Reads the float values off that stream and renders them as a live waveform and spectrum in its own window.
+---
 
-## How to run
+## Running from a Release
 
-Download the exe from the Releases page and run it. No install needed.
+### Windows — `.zip`
+1. Download and extract `AudioVisualizer-windows.zip`
+2. Run `AudioVisualizer.exe`
+
+No install needed.
+
+### Linux — `.tar.gz`
+1. Download and extract `AudioVisualizer-linux.tar.gz`
+2. Mark the binary as executable and run it:
+```bash
+chmod +x AudioVisualizer
+./AudioVisualizer
+```
+
+Requires PipeWire or PulseAudio (standard on Ubuntu 22.04+).
+
+---
+
+## Building from Source
 
 ### Windows
-Download the exe from the Releases page and run it. No install needed.
 
-### Linux
-Build from source (see below). Requires PipeWire or PulseAudio (standard on Ubuntu 22.04+).
-
-## How to build
-
-### Windows
-
-#### Requirements
+**Requirements**
 - Windows 10/11
 - CMake 3.20+
-- MSVC compiler (Visual Studio 2022 Build Tools or later)
+- MSVC (Visual Studio 2022 Build Tools or later)
 
-#### Steps
 ```bash
 git clone https://github.com/moemente/AudioVisualizer.git
 cd AudioVisualizer
@@ -33,17 +42,13 @@ cmake -B build -A x64
 cmake --build build --config Release
 ```
 
-The exe will be at `build/Release/AudioVisualizer.exe`.
+Output: `build/Release/AudioVisualizer.exe`
+
+---
 
 ### Linux
 
-If downloading the .tar archive instead, ensure you run
-
-```bash
-chmod +x /AudioVisualizer-linux/AudioVisualizer
-```
-
-#### Requirements
+**Requirements**
 - CMake 3.20+
 - GCC or Clang
 - libpulse-dev
@@ -52,7 +57,6 @@ chmod +x /AudioVisualizer-linux/AudioVisualizer
 sudo apt install cmake build-essential libpulse-dev
 ```
 
-#### Steps
 ```bash
 git clone https://github.com/moemente/AudioVisualizer.git
 cd AudioVisualizer
@@ -60,9 +64,11 @@ cmake -B build
 cmake --build build
 ```
 
-The exe will be at `build/AudioVisualizer`.
+Output: `build/AudioVisualizer`
 
-## Libraries used
+---
+
+## Libraries
 
 - [RtAudio](https://github.com/thestk/rtaudio)
 - [ImGui](https://github.com/ocornut/imgui)
