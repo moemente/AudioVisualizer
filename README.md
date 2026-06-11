@@ -1,10 +1,10 @@
 # AudioVisualizer
 
-A real-time audio visualizer for Windows built in C++ using RtAudio and ImGui.
+A real-time audio visualizer for Windows built in C++ using RtAudio, KissFFT, and ImGui.
 
 ## What it does
 
-Scans your connected audio devices, finds your default output device, and feeds the output back in as an input to create a loopback. Reads the float values off that stream and renders them as a live waveform in its own window.
+Scans your connected audio devices, finds your default output device, and feeds the output back in as an input to create a loopback. Reads the float values off that stream and renders them as a live waveform and spectrum in its own window.
 
 ## How to run
 
@@ -32,3 +32,4 @@ The exe will be at `build/Release/AudioVisualizer.exe`.
 - [RtAudio](https://github.com/thestk/rtaudio)
 - [ImGui](https://github.com/ocornut/imgui)
 - [GLFW](https://www.glfw.org/)
+- [KissFFT](https://github.com/mborgerding/kissfft)

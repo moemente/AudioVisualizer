@@ -8,6 +8,7 @@ set(GLFW_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/libs/glfw/include")
 set(GLFW_LIB "${CMAKE_CURRENT_SOURCE_DIR}/libs/glfw/lib-vc2022/glfw3.lib")
 set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/imgui")
 set(RTAUDIO_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/rtaudio")
+set(KISSFFT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/kissfft")
 
 add_executable(AudioVisualizer
     # Main source
@@ -23,6 +24,9 @@ add_executable(AudioVisualizer
 
     # RtAudio
     ${RTAUDIO_DIR}/RtAudio.cpp
+
+    # KissFFT
+    ${KISSFFT_DIR}/kiss_fft.c
 )
 
 target_include_directories(AudioVisualizer PRIVATE
@@ -30,6 +34,7 @@ target_include_directories(AudioVisualizer PRIVATE
     ${GLFW_INCLUDE}
     ${IMGUI_DIR}
     ${RTAUDIO_DIR}
+    ${KISSFFT_DIR}
 )
 
 target_compile_definitions(AudioVisualizer PRIVATE
