@@ -50,7 +50,7 @@ int  main()
     // Creates a 640x480 window titled AudioV, canvas for GUI.
     GLFWwindow* window = glfwCreateWindow(640, 480, "AudioV", NULL, NULL);
     // If window fails to create, errors out.
-    if (window == false)
+    if (window == nullptr)
     {
         glfwTerminate();
         fprintf(stderr, "Error with creating GLFW window.");
