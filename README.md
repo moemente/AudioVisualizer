@@ -37,6 +37,12 @@ The exe will be at `build/Release/AudioVisualizer.exe`.
 
 ### Linux
 
+If downloading the .tar archive instead, ensure you run
+
+'''bash
+chmod +x /AudioVisualizer-linux/AudioVisualizer
+'''
+
 #### Requirements
 - CMake 3.20+
 - GCC or Clang
